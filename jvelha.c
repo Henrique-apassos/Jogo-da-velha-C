@@ -322,10 +322,10 @@ int main(){
                 jogada++;
             }
             if(jogada == 5){
-                
+                int naojogou = 0;
+
                 LocalizaPeca(matriz, &seq_o, &O.posi, &O.posj, &k, &l,'O');
                 
-                int naojogou = 0;
                 if(seq_o == 2 && O.posi == 0 && O.posj == 0){
                     if(k==0 &&  l== 1){
                         if(matriz[0][2] == '-'){
@@ -363,8 +363,6 @@ int main(){
                         else
                             naojogou = 1;
                     }
-                    else 
-                        naojogou = 1;
                 }
                 if(seq_o == 2 && O.posi == 0 && O.posj == 1){
                     if(k == 0 && l == 2){
@@ -399,8 +397,6 @@ int main(){
                         else
                             naojogou = 1;
                     }
-                    else
-                        naojogou = 1;
                 }
                 if(seq_o == 2 && O.posi == 1 && O.posj == 0){
                     if(k == 1 && l == 1){
@@ -417,8 +413,6 @@ int main(){
                         else
                             naojogou = 1;
                     }
-                    else
-                        naojogou = 1;
                 }
                 if(seq_o == 2 && O.posi == 1 && O.posj == 1){
                     if(k==1 && l == 2){
@@ -479,8 +473,6 @@ int main(){
                             naojogou = 1;
                     }
                 }
-                else
-                    naojogou = 1;
                 if(naojogou == 1){
                     Peca Espaco;
                     RiscosPecas(matriz, &Espaco);
@@ -621,7 +613,6 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
                 }
             }
         }
-        //printf("%d %d \n", *posi, *posj);
         // posicao do 2a peca
         if (*posi == 0) {
             if (*posj == 0) {
@@ -870,7 +861,8 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
             }
         }
     }
-    //printf("%d %d \n", *k, *l);
+
+    //printf("Ref = %c: posi = %d, posj = %d, k = %d, l = %d \n", OX, *posi, *posj, *k, *l);
 }
 
 void RiscosPecas(char matriz[3][3], Peca *Espaco){
