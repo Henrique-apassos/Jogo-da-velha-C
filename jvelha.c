@@ -90,7 +90,6 @@ int main(){
                 LocalizaPeca(matriz, &seq_x, &X.posi, &X.posj, &k, &l, 'X');
 
                 // Escolhe a posicao para jogar
-                //printf("%d \n", seq_x);
                 if(seq_x == 2 && X.posi == 0 && X.posj == 0){
                     if(k == 0 && l == 1 )
                         matriz[0][2] = 'O';
@@ -102,7 +101,7 @@ int main(){
                         matriz[1][0] = 'O';
                     if(k == 1 && l == 1){
                         if(matriz[2][2] == '-')
-                            matriz[2][2] == 'O';
+                            matriz[2][2] = 'O';
                         else{
                             int escolha = rand() % 2;
                             switch(escolha){
@@ -360,8 +359,9 @@ int main(){
                         if(matriz[2][2] == '-'){
                             matriz[2][2] = 'O';
                         }
-                        else
+                        else{
                             naojogou = 1;
+                        }
                     }
                 }
                 if(seq_o == 2 && O.posi == 0 && O.posj == 1){
@@ -469,6 +469,14 @@ int main(){
                         if(matriz[2][1] == '-'){
                             matriz[2][1] = 'O';
                         }
+                        else
+                            naojogou = 1;
+                    }
+                }
+                if(seq_o == 2 && O.posi == 2 && O.posj == 1){
+                    if(k == 2 && l == 2){
+                        if(matriz[2][0] == '-')
+                            matriz[2][0] = 'O';
                         else
                             naojogou = 1;
                     }
@@ -862,7 +870,7 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
         }
     }
 
-    //printf("Ref = %c: posi = %d, posj = %d, k = %d, l = %d \n", OX, *posi, *posj, *k, *l);
+   // printf("Ref = %c: seq = %d, posi = %d, posj = %d, k = %d, l = %d \n", OX, *seq, *posi, *posj, *k, *l);
 }
 
 void RiscosPecas(char matriz[3][3], Peca *Espaco){
