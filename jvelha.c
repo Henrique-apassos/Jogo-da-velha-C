@@ -287,7 +287,7 @@ int main(){
                         matriz[0][2] = 'O';
                     }
                 }
-                if(seq_x == 2 && X.posi == 2 && X.posj == 1){
+                if(seq_x == 2 && X.posi == 2 && X.posj == 0){
                     if(k==2 && l==1){
                         matriz[2][2] = 'O';
                     }
@@ -325,6 +325,7 @@ int main(){
 
                 LocalizaPeca(matriz, &seq_o, &O.posi, &O.posj, &k, &l,'O');
                 
+                // Escolhe onde jogar dependendo da sequencia
                 if(seq_o == 2 && O.posi == 0 && O.posj == 0){
                     if(k==0 &&  l== 1){
                         if(matriz[0][2] == '-'){
@@ -332,7 +333,6 @@ int main(){
                         }
                         else
                             naojogou = 1;
-                        
                     }
                     if(k== 0 && l == 2){
                         if(matriz[0][1] == '-'){
@@ -359,9 +359,8 @@ int main(){
                         if(matriz[2][2] == '-'){
                             matriz[2][2] = 'O';
                         }
-                        else{
+                        else
                             naojogou = 1;
-                        }
                     }
                 }
                 if(seq_o == 2 && O.posi == 0 && O.posj == 1){
@@ -379,8 +378,6 @@ int main(){
                         else
                             naojogou = 1;
                     }
-                    else
-                        naojogou = 1;
                 }
                 if(seq_o == 2 && O.posi == 0 && O.posj == 2){
                     if(k == 1 && l == 1){
@@ -393,6 +390,13 @@ int main(){
                     if(k== 1 && l == 2){
                         if(matriz[2][2] == '-'){
                             matriz[2][2] = 'O';
+                        }
+                        else
+                            naojogou = 1;
+                    }
+                    if(k == 2 && l==2){
+                        if(matriz[1][2] == '-'){
+                            matriz[1][2] = 'O';
                         }
                         else
                             naojogou = 1;
@@ -436,8 +440,6 @@ int main(){
                         else
                             naojogou = 1;
                     }
-                    else
-                        naojogou = 1;
                     if(k == 2 && l == 0){
                         if(matriz[0][2] == '-'){
                             matriz[0][2] = 'O';
@@ -454,8 +456,6 @@ int main(){
                         else
                             naojogou = 1;
                     }
-                    else
-                        naojogou = 1;
                 }
                 if(seq_o == 2 && O.posi == 2 && O.posj == 0){
                     if(k == 2 && l == 1){
@@ -481,12 +481,17 @@ int main(){
                             naojogou = 1;
                     }
                 }
+                else if(seq_o < 2)
+                    naojogou = 1;
+
                 if(naojogou == 1){
                     Peca Espaco;
                     RiscosPecas(matriz, &Espaco);
                     matriz[Espaco.posi][Espaco.posj] = 'O';
                 }
+
                 jogada++;
+
             }
             if(jogada == 7){
                 Peca Espaco;
@@ -499,9 +504,11 @@ int main(){
                 fimJogo = 1;
             }
         }
+
         TesteVitoria(matriz, &fimJogo);  
+
     }
-    printf("\n");
+    // printf("\n");
     for(int i=0; i<3; i++){
         for(int j=0; j<3; j++){
             printf(" %c ", matriz[i][j]);
@@ -621,7 +628,7 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
                 }
             }
         }
-        // posicao do 2a peca
+        // verifica se tem sequencia
         if (*posi == 0) {
             if (*posj == 0) {
                 if (matriz[0][1] == 'X'){
@@ -634,10 +641,6 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
                 }
                 if (matriz[1][1] == 'X'){
                     *k=1; *l=1;
-                    *seq = 2;
-                }
-                if(matriz[2][2] == 'X'){
-                    *k=2; *l=2;
                     *seq = 2;
                 }
                 if (matriz[1][0] == 'X'){
@@ -658,18 +661,10 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
                     *k=1; *l=1;
                     *seq = 2;
                 }
-                if(matriz[2][1] == 'X'){
-                    *k=2; *l=1;
-                    *seq = 2;
-                } 
             }  
             if (*posj == 2){
                 if (matriz[1][2] == 'X'){
                     *k=1; *l=2;
-                    *seq = 2;
-                }
-                if(matriz[2][0] == 'X'){
-                    *k=2; *l=0;
                     *seq = 2;
                 }
                 if(matriz[2][2] == 'X'){
@@ -690,10 +685,6 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
                 }
                 if (matriz[1][1] == 'X'){
                     *k=1; *l=1;
-                    *seq = 2;
-                }
-                if (matriz[1][2] == 'X'){
-                    *k=1; *l=2;
                     *seq = 2;
                 }
             }
@@ -742,7 +733,7 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
         }
     }
     if(OX == 'O'){
-            // posicao do 1a peca
+        // posicao do 1a peca
         for (int i = 0; i < 3 && *seq == 0; i++){
             for (int j = 0; j < 3 && *seq == 0; j++) {
                 if (matriz[i][j] == 'O'){
@@ -752,62 +743,53 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
                 }
             }
         }
-        if (*posj == 0) {
-            if (matriz[0][1] == 'O'){
-                *k=0; *l=1;
-                *seq = 2;
+        // Verifica se tem sequencia
+        if(*posi == 0){
+            if(*posj == 0){
+                if(matriz[0][1] == 'O'){
+                    *k=0; *l=1;
+                    *seq = 2;
+                }
+                if(matriz[0][2] == 'O'){
+                    *k=0; *l=2;
+                    *seq = 2;
+                }
+                if(matriz[1][0] == 'O'){
+                    *k=1; *l=0;
+                    *seq=2;
+                }
+                if(matriz[2][0] == 'O'){
+                    *k=2; *l=0;
+                    *seq=2;
+                }
+                if(matriz[1][1] == 'O'){
+                    *k=1; *l=1;
+                    *seq=2;
+                }
             }
-            if (matriz[0][2] == 'O'){
-                *k=0; *l=2;
-                *seq = 2;
+            if(*posj == 1){
+                if(matriz[0][2] == 'O'){
+                    *k=0; *l=2;
+                    *seq = 2;
+                }
+                if(matriz[1][1] == 'O'){
+                    *k=1; *l=1;
+                    *seq = 2;
+                }
             }
-            if (matriz[1][1] == 'O'){
-                *k=1; *l=1;
-                *seq = 2;
-            }
-            if(matriz[2][2] == 'O'){
-                *k=2; *l=2;
-                *seq = 2;
-            }
-            if (matriz[1][0] == 'O'){
-                *k=1; *l=0;
-                *seq = 2;
-            }
-            if(matriz[2][0] == 'O'){
-                *k=2; *l=0;
-                *seq = 2;
-            }
-        }
-        if (*posj == 1){
-            if (matriz[0][2] == 'O'){
-                *k=0; *l=2;
-                *seq = 2;
-            }
-            if (matriz[1][1] == 'O'){
-                *k=1; *l=1;
-                *seq = 2;
-            }
-            if(matriz[2][1] == 'O'){
-                *k=2; *l=1;
-                *seq = 2;
-            } 
-        }  
-        if (*posj == 2){
-            if (matriz[1][2] == 'O'){
-                *k=1; *l=2;
-                *seq = 2;
-            }
-            if(matriz[2][0] == 'O'){
-                *k=2; *l=0;
-                *seq = 2;
-            }
-            if(matriz[2][2] == 'O'){
-                *k=2; *l=2;
-                *seq = 2;
-            } 
-            if(matriz[1][1] == 'O'){
-                *k=1; *l=1;
-                *seq = 2;
+            if(*posj == 2){
+                if(matriz[1][2] == 'O'){
+                    *k=1; *l=2;
+                    *seq = 2;
+                }
+                if(matriz[2][2] == 'O'){
+                    *k=2; *l=2;
+                    *seq = 2;
+                }
+                if(matriz[1][1] == 'O'){
+                    *k=1; *l=1;
+                    *seq = 2;
+                }
             }
         }
         if (*posi == 1){
@@ -876,59 +858,129 @@ void LocalizaPeca(char matriz[3][3], int *seq, int *posi, int *posj, int *k, int
 void RiscosPecas(char matriz[3][3], Peca *Espaco){
     Espaco->posi = 3;
     // Risco linhas
-    for(int i=0; i<3 ; i++){
-        if(matriz[i][0] == 'X' && matriz[i][1] == 'X' && matriz[i][2] == '-'){
+    for (int i = 0; i < 3; i++){
+        if (matriz[i][0] == 'O' && matriz[i][1] == 'O' && matriz[i][2] == '-'){
             Espaco->posi = i;
             Espaco->posj = 2;
         }
-        if(matriz[i][0] == 'X' && matriz[i][1] == '-' && matriz[i][2] == 'X'){
+        if (matriz[i][0] == 'O' && matriz[i][1] == '-' && matriz[i][2] == 'O'){
             Espaco->posi = i;
             Espaco->posj = 1;
         }
-        if(matriz[i][0] == '-' && matriz[i][1] == 'X' && matriz[i][2] == 'X'){
+        if (matriz[i][0] == '-' && matriz[i][1] == 'O' && matriz[i][2] == 'O'){
             Espaco->posi = i;
             Espaco->posj = 0;
         }
-        if(Espaco->posi != 3){
+        if (Espaco->posi != 3){
             return;
         }
     }
     // Risco colunas
-    for(int i=0; i<3 ; i++){
-        if(matriz[0][i] == 'X' && matriz[1][i] == 'X' && matriz[2][i] == '-'){
+    for (int i = 0; i < 3; i++){
+        if (matriz[0][i] == 'O' && matriz[1][i] == 'O' && matriz[2][i] == '-'){
             Espaco->posj = i;
             Espaco->posi = 2;
         }
-        if(matriz[0][i] == 'X' && matriz[1][i] == '-' && matriz[2][i] == 'X'){
+        if (matriz[0][i] == 'O' && matriz[1][i] == '-' && matriz[2][i] == 'O'){
             Espaco->posj = i;
             Espaco->posi = 1;
         }
-        if(matriz[0][i] == '-' && matriz[1][i] == 'X' && matriz[2][i] == 'X'){
+        if (matriz[0][i] == '-' && matriz[1][i] == 'O' && matriz[2][i] == 'O'){
             Espaco->posj = i;
             Espaco->posi = 0;
         }
-        if(Espaco->posi != 3){
+        if (Espaco->posi != 3){
             return;
         }
     }
     // Risco diagonais
-    if(matriz[0][0] == 'X' && matriz[1][1] == 'X' && matriz[2][2] == '-'){
-        Espaco->posi = 2; Espaco->posj = 2;
+    if (matriz[0][0] == 'O' && matriz[1][1] == 'O' && matriz[2][2] == '-'){
+        Espaco->posi = 2;
+        Espaco->posj = 2;
     }
-    if(matriz[0][0] == 'X' && matriz[1][1] == '-' && matriz[2][2] == 'X'){
-        Espaco->posi = 1; Espaco->posj = 1;
+    if (matriz[0][0] == 'O' && matriz[1][1] == '-' && matriz[2][2] == 'O'){
+        Espaco->posi = 1;
+        Espaco->posj = 1;
     }
-    if(matriz[0][0] == '-' && matriz[1][1] == 'X' && matriz[2][2] == 'X'){
-        Espaco->posi = 0; Espaco->posj = 0;
+    if (matriz[0][0] == '-' && matriz[1][1] == 'O' && matriz[2][2] == 'O'){
+        Espaco->posi = 0;
+        Espaco->posj = 0;
     }
-    if(matriz[0][2] == '-' && matriz[1][1] == 'X' && matriz[2][0] == 'X'){
-        Espaco->posi = 0; Espaco->posj = 2;
+    if (matriz[0][2] == '-' && matriz[1][1] == 'O' && matriz[2][0] == 'O'){
+        Espaco->posi = 0;
+        Espaco->posj = 2;
     }
-    if(matriz[0][2] == 'X' && matriz[1][1] == '-' && matriz[2][0] == 'X'){
-        Espaco->posi = 1; Espaco->posj = 1;
+    if (matriz[0][2] == 'O' && matriz[1][1] == '-' && matriz[2][0] == 'O'){
+        Espaco->posi = 1;
+        Espaco->posj = 1;
     }
-    if(matriz[0][2] == 'X' && matriz[1][1] == 'X' && matriz[2][0] == '-'){
-        Espaco->posi = 0; Espaco->posj = 2;
+    if (matriz[0][2] == 'O' && matriz[1][1] == 'O' && matriz[2][0] == '-'){
+        Espaco->posi = 2;
+        Espaco->posj = 0;
+    }
+    if (Espaco->posi != 3){
+        return;
+    }
+    // Risco linhas
+    for (int i = 0; i < 3; i++){
+        if (matriz[i][0] == 'X' && matriz[i][1] == 'X' && matriz[i][2] == '-'){
+            Espaco->posi = i;
+            Espaco->posj = 2;
+        }
+        if (matriz[i][0] == 'X' && matriz[i][1] == '-' && matriz[i][2] == 'X'){
+            Espaco->posi = i;
+            Espaco->posj = 1;
+        }
+        if (matriz[i][0] == '-' && matriz[i][1] == 'X' && matriz[i][2] == 'X'){
+            Espaco->posi = i;
+            Espaco->posj = 0;
+        }
+        if (Espaco->posi != 3){
+            return;
+        }
+    }
+    // Risco colunas
+    for (int i = 0; i < 3; i++){
+        if (matriz[0][i] == 'X' && matriz[1][i] == 'X' && matriz[2][i] == '-'){
+            Espaco->posj = i;
+            Espaco->posi = 2;
+        }
+        if (matriz[0][i] == 'X' && matriz[1][i] == '-' && matriz[2][i] == 'X'){
+            Espaco->posj = i;
+            Espaco->posi = 1;
+        }
+        if (matriz[0][i] == '-' && matriz[1][i] == 'X' && matriz[2][i] == 'X'){
+            Espaco->posj = i;
+            Espaco->posi = 0;
+        }
+        if (Espaco->posi != 3){
+            return;
+        }
+    }
+    // Risco diagonais
+    if (matriz[0][0] == 'X' && matriz[1][1] == 'X' && matriz[2][2] == '-'){
+        Espaco->posi = 2;
+        Espaco->posj = 2;
+    }
+    if (matriz[0][0] == 'X' && matriz[1][1] == '-' && matriz[2][2] == 'X'){
+        Espaco->posi = 1;
+        Espaco->posj = 1;
+    }
+    if (matriz[0][0] == '-' && matriz[1][1] == 'X' && matriz[2][2] == 'X'){
+        Espaco->posi = 0;
+        Espaco->posj = 0;
+    }
+    if (matriz[0][2] == '-' && matriz[1][1] == 'X' && matriz[2][0] == 'X'){
+        Espaco->posi = 0;
+        Espaco->posj = 2;
+    }
+    if (matriz[0][2] == 'X' && matriz[1][1] == '-' && matriz[2][0] == 'X'){
+        Espaco->posi = 1;
+        Espaco->posj = 1;
+    }
+    if (matriz[0][2] == 'X' && matriz[1][1] == 'X' && matriz[2][0] == '-'){
+        Espaco->posi = 2;
+        Espaco->posj = 0;
     }
     if (Espaco->posi != 3){
         return;
